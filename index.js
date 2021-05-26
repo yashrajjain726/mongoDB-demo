@@ -34,13 +34,26 @@ async function createCourse() {
 }
 
 async function getCourses() {
+  // Comparision Operators - >
+  // {
+  // eq (equal)
+  // ne (not equal)
+  // gt (greater than)
+  // gte (greater than or equal to)
+  // lt   (less than)
+  // lte  (less than or equal to)
+  // in
+  // nin  (not in)
+
+  // fpr example -> Course.find({price:{$gt:10}})
+  // }
   const courses = await Course.find({
     author: "Yashraj Jain",
     isPublished: "true",
   })
     .limit(10)
     .sort({ name: 1 })
-    .select({name:1,tags:1})
+    .select({ name: 1, tags: 1 });
   console.log(courses);
 }
 getCourses();
