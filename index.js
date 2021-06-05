@@ -44,9 +44,17 @@ async function getCourses() {
   // lte  (less than or equal to)
   // in
   // nin  (not in)
-
-  // fpr example -> Course.find({price:{$gt:10}})
+  // or
+  // and
+  // for example -> Course.find({price:{$gt:10}})
   // }
+
+
+
+  // Fetch the course in which 
+  // author starts with Yash -> Course.find({author:/^Yash/})
+  // author ends with Jain -> Course.find({author:/Jain$/}) 
+  // author contains raj -> Course.find({/.*raj.*/})
   const courses = await Course.find({
     author: "Yashraj Jain",
     isPublished: "true",
