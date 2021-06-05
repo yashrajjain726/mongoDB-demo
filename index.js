@@ -65,3 +65,19 @@ async function getCourses() {
   console.log(courses);
 }
 getCourses();
+// update the course
+async function updateCourse(id)
+{
+    // Approach 1: Query First -> findById() -> Modify its properties -> save()
+    // Approach 2 : Update First -> Update Directly
+    const course  = await Course.findById(id);
+    if(!course)
+    {
+      return;
+    } 
+    course.isPublished= true;
+    course.author='Jaukin';
+    const result = await course.save();
+    console.log(result);
+}
+updateCourse('60ae4b5f8e743b44e47b8687');
