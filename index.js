@@ -69,7 +69,6 @@ getCourses();
 async function updateCourse(id)
 {
     // Approach 1: Query First -> findById() -> Modify its properties -> save()
-    // Approach 2 : Update First -> Update Directly
     const course  = await Course.findById(id);
     if(!course)
     {
