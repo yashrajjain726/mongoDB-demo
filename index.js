@@ -10,28 +10,33 @@ mongoose
 // Defining schema for database
 const courseSchema = new mongoose.Schema({
   name: { type: String, required: true, minlength: 5, maxlength: 255 },
-  category:{
-    type:String,
-    enum:['web','mobile','network'],
-    required:true
+  category: {
+    type: String,
+    enum: ["web", "mobile", "network"],
+    required: true,
   },
   author: String,
   tags: {
-    type:Array,
-    validate:{
-      validator:function(v){
-        return v && v.length>0;
+    type: Array,
+   
+    validate: {
+      isAsync: true,
+      validator: function (v, callback) {
+        setTimeout(() => {
+          const result = v && v.length > 0;
+          callback(result);
+        }, 4000);
       },
-      message:' A course should have atleast one tag.'
-    }
+      message: " A course should have atleast one tag.",
+    },
   },
   date: { type: Date, default: Date.now },
 
   isPublished: Boolean,
   price: {
     type: Number,
-    min:10,
-    max:200,
+    min: 10,
+    max: 200,
     required: function () {
       return this.isPublished;
     },
@@ -49,14 +54,17 @@ async function createCourse() {
     author: "Yashraj Jain",
     tags: null,
     isPublished: true,
-    category:'web',
-    price:15
+    category: "-",
+    price: 15,
   });
   try {
     const result = await course.save();
     console.log(result);
-  } catch (err) {
-    console.log(err.message);
+  } catch (ex) {
+    for(field in ex.errors)
+      {
+        console.log(ex.errors[field].message);
+      }
   }
 }
 
