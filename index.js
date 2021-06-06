@@ -9,11 +9,25 @@ mongoose
 
 // Defining schema for database
 const courseSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: true, minlength: 5, maxlength: 255 },
+  category:{
+    type:String,
+    enum:['web','mobile','network'],
+    required:true
+  },
   author: String,
   tags: [String],
   date: { type: Date, default: Date.now },
+
   isPublished: Boolean,
+  price: {
+    type: Number,
+    min:10,
+    max:200,
+    required: function () {
+      return this.isPublished;
+    },
+  },
 });
 
 // Creating a model
@@ -27,10 +41,15 @@ async function createCourse() {
     author: "Yashraj Jain",
     tags: ["react", "frontend"],
     isPublished: true,
+    category:'-',
+    price:15
   });
-
-  const result = await course.save();
-  console.log(result);
+  try {
+    const result = await course.save();
+    console.log(result);
+  } catch (err) {
+    console.log(err.message);
+  }
 }
 
 async function getCourses() {
@@ -49,11 +68,9 @@ async function getCourses() {
   // for example -> Course.find({price:{$gt:10}})
   // }
 
-
-
-  // Fetch the course in which 
+  // Fetch the course in which
   // author starts with Yash -> Course.find({author:/^Yash/})
-  // author ends with Jain -> Course.find({author:/Jain$/}) 
+  // author ends with Jain -> Course.find({author:/Jain$/})
   // author contains raj -> Course.find({/.*raj.*/})
   const courses = await Course.find({
     author: "Yashraj Jain",
@@ -66,23 +83,24 @@ async function getCourses() {
 }
 getCourses();
 // update the course
-async function updateCourse(id)
-{
-     // Approach 2 : Update First -> Update Directly
-    const result  = await Course.updateMany({_id:id},{
-      $set:{
-        author:'Yash',
-        isPublished:false,
-      }
-    });
-    console.log(result);
+async function updateCourse(id) {
+  // Approach 2 : Update First -> Update Directly
+  const result = await Course.updateMany(
+    { _id: id },
+    {
+      $set: {
+        author: "Yash",
+        isPublished: false,
+      },
+    }
+  );
+  console.log(result);
 }
 
 // Remove Course
-async function removeCourse(id)
-{
-     // Approach 2 : Update First -> Update Directly
-    const result  = await Course.deleteOne({_id:id});
-    console.log(result);
+async function removeCourse(id) {
+  // Approach 2 : Update First -> Update Directly
+  const result = await Course.deleteOne({ _id: id });
+  console.log(result);
 }
-removeCourse('60ae4b5f8e743b44e47b8687')
+createCourse();
