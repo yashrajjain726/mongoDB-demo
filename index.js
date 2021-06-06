@@ -16,7 +16,15 @@ const courseSchema = new mongoose.Schema({
     required:true
   },
   author: String,
-  tags: [String],
+  tags: {
+    type:Array,
+    validate:{
+      validator:function(v){
+        return v && v.length>0;
+      },
+      message:' A course should have atleast one tag.'
+    }
+  },
   date: { type: Date, default: Date.now },
 
   isPublished: Boolean,
@@ -39,9 +47,9 @@ async function createCourse() {
   const course = new Course({
     name: "React.js Course",
     author: "Yashraj Jain",
-    tags: ["react", "frontend"],
+    tags: null,
     isPublished: true,
-    category:'-',
+    category:'web',
     price:15
   });
   try {
